@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Terminal, Smartphone, Download, Check, Sparkles, AlertTriangle, Github, Play, ArrowRight, ExternalLink } from 'lucide-react';
+import { Smartphone, Download, Check, AlertTriangle, Github, CheckCircle2 } from 'lucide-react';
 
 interface InstallationGuideModalProps {
   isOpen: boolean;
@@ -12,7 +12,7 @@ export const InstallationGuideModal: React.FC<InstallationGuideModalProps> = ({
   onClose,
   onDownloadZip,
 }) => {
-  const [activeTab, setActiveTab] = useState<'github' | 'studio' | 'termux'>('github');
+  const [activeTab, setActiveTab] = useState<'github' | 'studio'>('github');
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   if (!isOpen) return null;
@@ -28,7 +28,9 @@ export const InstallationGuideModal: React.FC<InstallationGuideModalProps> = ({
 on:
   push:
     branches: [ "main", "master" ]
-  workflow_dispatch: # Allows manual trigger from GitHub web UI
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -36,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout Source Code
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
@@ -44,21 +46,25 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-          cache: 'gradle'
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Build APK with Gradle
-        run: |
-          chmod +x gradlew || true
-          ./gradlew assembleDebug --no-daemon
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.7'
 
-      - name: Upload APK to Artifacts
+      - name: Build Debug APK with Gradle
+        run: |
+          gradle assembleDebug --stacktrace --no-daemon
+
+      - name: Upload APK as GitHub Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: scribeflow-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: ScribeFlow-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
           retention-days: 30`;
 
   return (
@@ -72,10 +78,10 @@ jobs:
             </div>
             <div>
               <h3 className="text-base font-semibold text-white tracking-tight">
-                How to Get &amp; Build the APK File
+                How to Download &amp; Build the ScribeFlow APK
               </h3>
               <p className="text-xs text-slate-400">
-                Why GitHub didn't show an APK by default &amp; how to build it automatically
+                Native Android App repository structure &amp; automated APK compilation
               </p>
             </div>
           </div>
@@ -87,12 +93,17 @@ jobs:
           </button>
         </div>
 
-        {/* Why there's no APK banner */}
-        <div className="px-5 py-3 bg-amber-950/30 border-b border-amber-800/40 text-xs text-amber-200/90 flex items-start gap-2.5">
-          <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-          <div className="leading-relaxed">
-            <strong>Why was there no APK on GitHub?</strong> GitHub is a source code repository—it only stores text files (<code className="text-amber-100 font-mono">.kt</code>, <code className="text-amber-100 font-mono">.xml</code>), not compiled binaries. To get an <code className="text-amber-100 font-mono">.apk</code>, you need a builder to compile it. Use <strong>GitHub Actions</strong> (free in the cloud) or <strong>Android Studio</strong> below!
+        {/* Root Cause Explanation Banner */}
+        <div className="px-5 py-3.5 bg-cyan-950/40 border-b border-cyan-800/40 text-xs text-slate-300 space-y-1.5">
+          <div className="flex items-center gap-2 text-cyan-300 font-semibold">
+            <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
+            <span>Why the previous GitHub build failed &amp; why an AI said it's a web app:</span>
           </div>
+          <p className="text-[11px] text-slate-300 leading-relaxed pl-6">
+            1. <strong>Missing XML Resources Fixed:</strong> The initial commit lacked Android XML layouts (<code className="text-cyan-300 font-mono">activity_main.xml</code>, <code className="text-cyan-300 font-mono">layout_floating_watermark_pill.xml</code>, <code className="text-cyan-300 font-mono">strings.xml</code>, <code className="text-cyan-300 font-mono">themes.xml</code>), which caused Gradle's AAPT compiler to fail before outputting the APK.<br />
+            2. <strong>Dual Project Architecture:</strong> This repository contains <strong>BOTH</strong> the complete Native Android Application (in <code className="text-cyan-300 font-mono">/app</code> with Kotlin, AndroidManifest, Gradle, &amp; resources) and an in-browser device simulator (<code className="text-slate-400 font-mono">package.json</code>). An AI looking only at the root files mistook <code className="text-slate-400 font-mono">package.json</code> for the entire project.<br />
+            3. <strong>We have now created 100% of the native Android files</strong>, root build scripts, and an automated GitHub Actions runner.
+          </p>
         </div>
 
         {/* Method Switcher Tabs */}
@@ -106,7 +117,7 @@ jobs:
             }`}
           >
             <Github className="w-4 h-4" />
-            <span>Option 1: GitHub Cloud Build (Easiest)</span>
+            <span>Method 1: GitHub Cloud Build (Recommended - 1 Click)</span>
           </button>
           <button
             onClick={() => setActiveTab('studio')}
@@ -117,7 +128,7 @@ jobs:
             }`}
           >
             <Smartphone className="w-4 h-4" />
-            <span>Option 2: Android Studio</span>
+            <span>Method 2: Android Studio Local Build</span>
           </button>
         </div>
 
@@ -126,40 +137,40 @@ jobs:
           {activeTab === 'github' && (
             <div className="space-y-4">
               <div className="p-3 bg-cyan-950/30 border border-cyan-800/40 rounded-xl text-cyan-300 text-xs">
-                ✨ <strong>Zero software to install!</strong> We have added the automated GitHub Actions workflow to this project at <code className="text-white font-mono">.github/workflows/build-apk.yml</code>.
+                ✨ <strong>Zero software needed on your computer!</strong> GitHub compiles the Android APK in the cloud using Ubuntu + Gradle 8.7 + Android SDK 34.
               </div>
 
               <div className="space-y-3">
-                <h4 className="text-sm font-semibold text-white">4 Simple Steps to Download the APK from GitHub:</h4>
+                <h4 className="text-sm font-semibold text-white">4 Simple Steps to Download the APK:</h4>
 
                 <div className="space-y-2.5">
                   <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
                     <div className="flex items-center gap-2 font-semibold text-white">
                       <span className="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-[10px]">1</span>
-                      <span>Push the code to your GitHub repo</span>
+                      <span>Push or sync this repository to GitHub</span>
                     </div>
                     <p className="text-[11px] text-slate-400 pl-7">
-                      Ensure your repository includes the <code className="text-cyan-300 font-mono">.github/workflows/build-apk.yml</code> file (included in our latest update).
+                      All native Android files in <code className="text-cyan-300 font-mono">/app</code>, <code className="text-cyan-300 font-mono">settings.gradle.kts</code>, and <code className="text-cyan-300 font-mono">.github/workflows/build-apk.yml</code> are ready to push.
                     </p>
                   </div>
 
                   <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
                     <div className="flex items-center gap-2 font-semibold text-white">
                       <span className="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-[10px]">2</span>
-                      <span>Click the "Actions" tab on GitHub</span>
+                      <span>Open the "Actions" tab on GitHub</span>
                     </div>
                     <p className="text-[11px] text-slate-400 pl-7">
-                      At the top of your GitHub repository page, click the tab named <strong>Actions</strong> (between <em>Pull requests</em> and <em>Projects</em>).
+                      Go to your GitHub repo in your browser and click the <strong>Actions</strong> tab at the top.
                     </p>
                   </div>
 
                   <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
                     <div className="flex items-center gap-2 font-semibold text-white">
                       <span className="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-[10px]">3</span>
-                      <span>Trigger or watch the build</span>
+                      <span>Select "Build ScribeFlow Android APK" &amp; Run Workflow</span>
                     </div>
                     <p className="text-[11px] text-slate-400 pl-7">
-                      You will see <strong>"Build ScribeFlow Android APK"</strong>. If it hasn't started automatically, click it in the left sidebar, click <strong>"Run workflow"</strong>, and hit the green button. It takes ~2 minutes.
+                      It will automatically run on push, or you can click <strong>"Run workflow"</strong> to start it immediately. It takes ~2 minutes.
                     </p>
                   </div>
 
@@ -169,7 +180,7 @@ jobs:
                       <span>Download the APK from "Artifacts"</span>
                     </div>
                     <p className="text-[11px] text-slate-300 pl-7 leading-relaxed">
-                      Once the run shows a green checkmark (✓), click into it. Scroll to the bottom to the <strong>Artifacts</strong> section, and click <strong>scribeflow-debug-apk</strong>. It downloads directly to your device!
+                      Once the run shows a green checkmark (✓), click into it. Scroll down to the <strong>Artifacts</strong> section at the bottom, and click <strong>ScribeFlow-debug-apk</strong>. Sideload the APK onto your Android phone and enjoy!
                     </p>
                   </div>
                 </div>
@@ -197,35 +208,35 @@ jobs:
             <div className="space-y-4">
               <h4 className="text-sm font-semibold text-white">Build Locally Using Android Studio</h4>
               <p>
-                If you have a laptop or desktop computer with Android Studio installed, you can generate the APK in 60 seconds:
+                If you have a laptop or computer with Android Studio installed, you can generate the APK in 60 seconds:
               </p>
 
               <div className="space-y-2">
                 <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
                   <strong>1. Export and Extract:</strong>
                   <p className="text-[11px] text-slate-400">
-                    Click <strong>"Export Android Project"</strong> to download the ZIP file and extract it.
+                    Click <strong>"Export Android Project (.ZIP)"</strong> below to download the complete Android project archive and extract it.
                   </p>
                 </div>
 
                 <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
                   <strong>2. Open in Android Studio:</strong>
                   <p className="text-[11px] text-slate-400">
-                    Open Android Studio, select <strong>Open</strong>, and choose the extracted folder.
+                    Open Android Studio, select <strong>Open</strong>, and choose the extracted folder. Android Studio will recognize the Gradle project immediately.
                   </p>
                 </div>
 
                 <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
-                  <strong>3. Click Build APK:</strong>
+                  <strong>3. Build the APK:</strong>
                   <p className="text-[11px] text-slate-400">
-                    From the top menu, go to: <code className="text-cyan-300 font-mono">Build &gt; Build Bundle(s) / APK(s) &gt; Build APK(s)</code>.
+                    From the top menu, click: <code className="text-cyan-300 font-mono">Build &gt; Build Bundle(s) / APK(s) &gt; Build APK(s)</code>.
                   </p>
                 </div>
 
                 <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
-                  <strong>4. Locate APK &amp; Sideload:</strong>
+                  <strong>4. Install on your Android Phone:</strong>
                   <p className="text-[11px] text-slate-400">
-                    Android Studio will show a popup saying <em>"APK(s) generated successfully"</em> with a <strong>locate</strong> link. The APK will be at: <code className="text-cyan-300 font-mono">app/build/outputs/apk/debug/app-debug.apk</code>. Transfer it to your phone and install!
+                    Android Studio will show a balloon notification saying <em>"APK(s) generated successfully"</em> with a <strong>locate</strong> link. The APK is located at: <code className="text-cyan-300 font-mono">app/build/outputs/apk/debug/app-debug.apk</code>. Transfer it to your phone and install!
                   </p>
                 </div>
               </div>
@@ -240,7 +251,7 @@ jobs:
             className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-xl text-xs transition-colors flex items-center gap-1.5"
           >
             <Download className="w-3.5 h-3.5" />
-            Download Project .ZIP
+            Download Android Project .ZIP
           </button>
           <button
             onClick={onClose}

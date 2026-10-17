@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ScribeFlow</string>
+    <string name="accessibility_service_description">ScribeFlow detects when any text input field is focused across your apps, displays the floating translucent watermark pill, and injects offline transcribed speech directly into the active field.</string>
+    <string name="title_permissions">Required Permissions</string>
+    <string name="btn_overlay_label">1. Grant Floating Overlay</string>
+    <string name="btn_accessibility_label">2. Enable Accessibility Service</string>
+    <string name="btn_mic_label">3. Grant Microphone Permission</string>
+    <string name="watermark_opacity_label">Watermark Opacity (Ghost / Translucent)</string>
+    <string name="listening_status">Listening...</string>
+</resources>

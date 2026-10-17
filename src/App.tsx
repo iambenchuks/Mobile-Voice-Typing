@@ -181,11 +181,11 @@ export default function App() {
             <div className="pt-2">
               <button
                 onClick={() => setIsGuideOpen(true)}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-xs text-amber-200 text-left transition-colors"
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-xs text-cyan-200 text-left transition-colors group"
               >
-                <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Pushed to GitHub but no APK file? Click here to learn how GitHub Actions compiles the APK file in the cloud!</span>
-                <span className="underline font-semibold ml-1">Open Guide &rarr;</span>
+                <Smartphone className="w-4 h-4 text-cyan-400 shrink-0 group-hover:scale-110 transition-transform" />
+                <span><strong>Need the Android APK file?</strong> Complete native Android files (<code className="font-mono text-white">/app</code>, Gradle 8.7, XML resources) are configured with automated GitHub Actions compilation.</span>
+                <span className="underline font-semibold text-cyan-300 ml-1">Download &amp; Build Guide &rarr;</span>
               </button>
             </div>
           </div>
