@@ -1,0 +1,6 @@
+{
+  "name": "WhisperFlow Mobile - Offline Floating Dictation for Android",
+  "description": "Ultra-lightweight offline English voice dictation with a translucent watermark floating bubble, accessibility focus detection, and instant text injection across all Android apps.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
