@@ -102,11 +102,11 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
     },
     {
       label: 'Dictate Note with Newline',
-      phrase: 'Meeting action items colon new line test WhisperFlow offline accuracy new line verify watermark transparency period',
+      phrase: 'Meeting action items colon new line test ScribeFlow offline accuracy new line verify watermark transparency period',
     },
     {
       label: 'Chat Message',
-      phrase: 'Hey Jordan comma I am testing WhisperFlow on my Android phone right now period Works 100% offline exclamation mark',
+      phrase: 'Hey Jordan comma I am testing ScribeFlow on my Android phone right now period Works 100% offline exclamation mark',
     },
   ];
 
@@ -287,7 +287,7 @@ export const PhoneSimulator: React.FC<PhoneSimulatorProps> = ({
           <div className="flex items-center justify-between pb-3 border-b border-slate-800">
             <div>
               <h2 className="text-base font-semibold text-white tracking-tight flex items-center gap-2">
-                <span>WhisperFlow Floating Watermark Engine</span>
+                <span>ScribeFlow Floating Watermark Engine</span>
               </h2>
               <p className="text-xs text-slate-400 mt-0.5">
                 Emulating Android's <code className="text-cyan-300 font-mono">AccessibilityService</code> & <code className="text-cyan-300 font-mono">WindowManager.TYPE_APPLICATION_OVERLAY</code>

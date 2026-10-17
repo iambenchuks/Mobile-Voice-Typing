@@ -18,7 +18,7 @@ export const WhatsAppChatApp: React.FC<WhatsAppChatAppProps> = ({
     {
       id: '1',
       sender: 'them',
-      text: "Hey! Did you see the new Whisperflow floating watermark app?",
+      text: "Hey! Did you see the new ScribeFlow floating watermark app?",
       time: '18:10',
     },
     {

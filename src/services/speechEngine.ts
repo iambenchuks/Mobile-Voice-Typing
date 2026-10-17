@@ -1,5 +1,5 @@
 /**
- * Offline & Local Speech Engine for WhisperFlow
+ * Offline & Local Speech Engine for ScribeFlow
  * Handles microphone capture, Web Audio visualizer,
  * verbal punctuation parsing, and Web Speech API.
  */

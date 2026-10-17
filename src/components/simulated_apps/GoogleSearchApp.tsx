@@ -19,7 +19,7 @@ export const GoogleSearchApp: React.FC<GoogleSearchAppProps> = ({
 
   const sampleTrending = [
     'whisper tiny offline english apk',
-    'how does whisperflow floating icon work android',
+    'how does scribeflow floating icon work android',
     'handy speech to text shortcut keys',
     'android accessibility service input focus listener',
   ];
@@ -45,7 +45,7 @@ export const GoogleSearchApp: React.FC<GoogleSearchAppProps> = ({
               <span className="text-emerald-400">l</span>
               <span className="text-red-400">e</span>
             </span>
-            <p className="text-[11px] text-slate-400 mt-1">Search the web or dictate via WhisperFlow</p>
+            <p className="text-[11px] text-slate-400 mt-1">Search the web or dictate via ScribeFlow</p>
           </div>
         ) : (
           <div className="w-full flex items-center justify-between pb-3 border-b border-slate-700 mb-3">
@@ -102,9 +102,9 @@ export const GoogleSearchApp: React.FC<GoogleSearchAppProps> = ({
             </div>
 
             <div className="p-3 bg-[#303134] rounded-xl border border-slate-700/60">
-              <span className="text-[10px] text-emerald-400 block">https://whisperflow.org/android</span>
+              <span className="text-[10px] text-emerald-400 block">https://scribeflow.org/android</span>
               <h4 className="text-sm font-semibold text-blue-400 hover:underline cursor-pointer mt-0.5">
-                WhisperFlow Mobile: Ultra-Lightweight Offline English STT
+                ScribeFlow Mobile: Ultra-Lightweight Offline English STT
               </h4>
               <p className="text-xs text-slate-300 mt-1 leading-relaxed">
                 Seamless floating watermark bubble triggered automatically upon text field focus. 100% on-device speech processing with zero cloud latency.

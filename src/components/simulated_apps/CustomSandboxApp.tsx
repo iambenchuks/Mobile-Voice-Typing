@@ -17,7 +17,7 @@ export const CustomSandboxApp: React.FC<CustomSandboxAppProps> = ({
   activeFocusId,
 }) => {
   const [field1, setField1] = useState('Quick task description');
-  const [field2, setField2] = useState('https://github.com/whisperflow');
+  const [field2, setField2] = useState('https://github.com/scribeflow');
   const [field3, setField3] = useState('');
 
   const handleReset = () => {
@@ -136,7 +136,7 @@ export const CustomSandboxApp: React.FC<CustomSandboxAppProps> = ({
             const rect = e.currentTarget.getBoundingClientRect();
             onInputFocus('sandbox-memo-field', rect);
           }}
-          placeholder="Speak naturally: 'Whisperflow works like handy on laptop comma typing directly offline period new line this is fast!'"
+          placeholder="Speak naturally: 'ScribeFlow works like handy on laptop comma typing directly offline period new line this is fast!'"
           className={`w-full px-3 py-2 text-xs rounded-xl bg-slate-800/80 border transition-all resize-none leading-relaxed ${
             activeFocusId === 'sandbox-memo-field'
               ? 'border-cyan-500 ring-1 ring-cyan-500/20 text-white'

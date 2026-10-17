@@ -11,7 +11,7 @@ export const ModelBenchmarking: React.FC = () => {
       ram: '~85 MB active RAM',
       latency: '~120-150ms RTF',
       offline: '100% On-Device',
-      status: 'Recommended for WhisperFlow',
+      status: 'Recommended for ScribeFlow',
       isHero: true,
       notes: 'Optimized specifically for English. Handles punctuation, accents, technical jargon, and background noise exceptionally well.',
     },
@@ -146,13 +146,13 @@ export const ModelBenchmarking: React.FC = () => {
         <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
           <div className="text-xs font-semibold text-white flex items-center gap-1.5">
             <Zap className="w-4 h-4 text-amber-400" />
-            How Handy & WhisperFlow Work Under the Hood
+            How Handy & ScribeFlow Work Under the Hood
           </div>
           <p className="text-xs text-slate-400 leading-relaxed">
             On macOS/Windows, <strong>Handy</strong> registers a global keyboard shortcut hook, captures your microphone to an in-memory ring buffer, processes the audio through quantized C++ Whisper, and synthesizes keypresses via OS event taps.
           </p>
           <p className="text-xs text-slate-400 leading-relaxed">
-            On Android, there are no global keyboard shortcuts. Instead, <strong>WhisperFlow Mobile</strong> hooks into Android's <code className="text-cyan-300">AccessibilityService</code>, which is notified by the OS the millisecond you tap any <code className="text-cyan-300">EditText</code> or search box. It automatically shows the floating watermark pill near your finger, lets you tap or speak, and injects the text via <code className="text-cyan-300">AccessibilityNodeInfo.ACTION_SET_TEXT</code>!
+            On Android, there are no global keyboard shortcuts. Instead, <strong>ScribeFlow Mobile</strong> hooks into Android's <code className="text-cyan-300">AccessibilityService</code>, which is notified by the OS the millisecond you tap any <code className="text-cyan-300">EditText</code> or search box. It automatically shows the floating watermark pill near your finger, lets you tap or speak, and injects the text via <code className="text-cyan-300">AccessibilityNodeInfo.ACTION_SET_TEXT</code>!
           </p>
         </div>
 
@@ -165,7 +165,7 @@ export const ModelBenchmarking: React.FC = () => {
             Traditional speech recognition sends raw audio to external servers, exposing sensitive chat messages, passwords, and private notes.
           </p>
           <p className="text-xs text-slate-400 leading-relaxed">
-            WhisperFlow runs <strong>100% offline</strong> on your phone's processor. Turn on Airplane Mode or pull out your SIM card: voice recognition runs at the exact same lightning-fast speed with zero internet data used.
+            ScribeFlow runs <strong>100% offline</strong> on your phone's processor. Turn on Airplane Mode or pull out your SIM card: voice recognition runs at the exact same lightning-fast speed with zero internet data used.
           </p>
         </div>
       </div>

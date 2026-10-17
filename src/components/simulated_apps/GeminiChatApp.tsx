@@ -60,7 +60,7 @@ export const GeminiChatApp: React.FC<GeminiChatAppProps> = ({
       const geminiMsg: Message = {
         id: (Date.now() + 1).toString(),
         sender: 'gemini',
-        text: `Got your request: "${userMsg.text}". WhisperFlow dictated this straight into the text field offline!`,
+        text: `Got your request: "${userMsg.text}". ScribeFlow dictated this straight into the text field offline!`,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
       setMessages((prev) => [...prev, geminiMsg]);
@@ -88,7 +88,7 @@ export const GeminiChatApp: React.FC<GeminiChatAppProps> = ({
               {
                 id: '1',
                 sender: 'gemini',
-                text: "Hello! I'm Gemini. Tap the prompt box below to activate WhisperFlow watermark dictation.",
+                text: "Hello! I'm Gemini. Tap the prompt box below to activate ScribeFlow watermark dictation.",
                 time: '18:14',
               },
             ]);
@@ -121,7 +121,7 @@ export const GeminiChatApp: React.FC<GeminiChatAppProps> = ({
         ))}
       </div>
 
-      {/* Input composition area (triggers the Whisperflow watermark pill) */}
+      {/* Input composition area (triggers the ScribeFlow watermark pill) */}
       <div className="p-3 bg-[#1e1f20] border-t border-slate-800">
         <div className="relative flex items-center bg-[#131314] border border-slate-700/80 rounded-2xl px-3 py-2 focus-within:border-blue-500 transition-all">
           <textarea
@@ -135,7 +135,7 @@ export const GeminiChatApp: React.FC<GeminiChatAppProps> = ({
               const rect = e.currentTarget.getBoundingClientRect();
               onInputFocus('gemini-input-field', rect);
             }}
-            placeholder="Ask Gemini or dictate with WhisperFlow..."
+            placeholder="Ask Gemini or dictate with ScribeFlow..."
             rows={2}
             className="w-full bg-transparent resize-none text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none"
           />
@@ -152,7 +152,7 @@ export const GeminiChatApp: React.FC<GeminiChatAppProps> = ({
           </button>
         </div>
         <p className="text-[10px] text-slate-500 text-center mt-1.5">
-          Tap above to trigger the WhisperFlow translucent floating pill.
+          Tap above to trigger the ScribeFlow translucent floating pill.
         </p>
       </div>
     </div>

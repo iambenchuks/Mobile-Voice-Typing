@@ -28,7 +28,7 @@ export const SettingsDrawer: React.FC<SettingsDrawerProps> = ({
                 <Settings className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-base font-semibold text-white tracking-tight">WhisperFlow Settings</h3>
+                <h3 className="text-base font-semibold text-white tracking-tight">ScribeFlow Settings</h3>
                 <p className="text-xs text-slate-400">Floating Watermark & Offline Speech Preferences</p>
               </div>
             </div>

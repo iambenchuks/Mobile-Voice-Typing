@@ -21,7 +21,7 @@ export const AndroidCodeViewer: React.FC = () => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'WhisperFlow-Android-Offline-Project.zip';
+      a.download = 'ScribeFlow-Android-Offline-Project.zip';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

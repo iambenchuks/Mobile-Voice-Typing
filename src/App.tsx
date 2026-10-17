@@ -11,6 +11,7 @@ import {
   Mic,
   Sliders,
   Check,
+  AlertTriangle,
 } from 'lucide-react';
 import { DictationSettings, DictationHistoryItem } from './types';
 import { PhoneSimulator } from './components/PhoneSimulator';
@@ -40,7 +41,7 @@ export default function App() {
   const [dictationHistory, setDictationHistory] = useState<DictationHistoryItem[]>([
     {
       id: '1',
-      text: 'WhisperFlow automatically appears when you tap any text field in Gemini or WhatsApp.',
+      text: 'ScribeFlow automatically appears when you tap any text field in Gemini or WhatsApp.',
       timestamp: '18:12',
       targetApp: 'gemini',
       durationMs: 3200,
@@ -80,7 +81,7 @@ export default function App() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'WhisperFlow-Android-Offline-Project.zip';
+      a.download = 'ScribeFlow-Android-Offline-Project.zip';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -108,7 +109,7 @@ export default function App() {
           <div className="w-7 h-7 rounded-lg bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400 shadow-sm">
             <Mic className="w-4 h-4" />
           </div>
-          <span>WhisperFlow Mobile</span>
+          <span>ScribeFlow Mobile</span>
         </a>
 
         {/* Zone 2: 4-5 single-line clean text navigation links */}
@@ -139,9 +140,9 @@ export default function App() {
           </button>
           <button
             onClick={() => setIsGuideOpen(true)}
-            className="whitespace-nowrap shrink-0 hover:text-slate-200 transition-colors"
+            className="whitespace-nowrap shrink-0 hover:text-cyan-300 text-cyan-400 font-medium transition-colors flex items-center gap-1"
           >
-            APK Build Guide
+            <span>Download APK Guide</span>
           </button>
         </nav>
 
@@ -175,6 +176,18 @@ export default function App() {
             <p className="text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed">
               Works like <strong>Handy</strong> on your desktop laptop, built natively for Android phones. Features a translucent watermark floating icon that appears whenever you tap a text field in Gemini, Google Search, WhatsApp, or any app.
             </p>
+
+            {/* Quick alert banner explaining the GitHub APK workflow */}
+            <div className="pt-2">
+              <button
+                onClick={() => setIsGuideOpen(true)}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-xs text-amber-200 text-left transition-colors"
+              >
+                <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>Pushed to GitHub but no APK file? Click here to learn how GitHub Actions compiles the APK file in the cloud!</span>
+                <span className="underline font-semibold ml-1">Open Guide &rarr;</span>
+              </button>
+            </div>
           </div>
 
           {/* Quick specs strip */}
@@ -300,7 +313,7 @@ export default function App() {
       {/* Footer */}
       <footer className="mt-auto px-6 py-5 border-t border-slate-800 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <span className="text-slate-400 font-medium">WhisperFlow Mobile</span>
+          <span className="text-slate-400 font-medium">ScribeFlow Mobile</span>
           <span>·</span>
           <span>100% Offline English Voice Dictation for Android</span>
         </div>

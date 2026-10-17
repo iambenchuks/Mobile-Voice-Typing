@@ -18,7 +18,7 @@ export const KeepNotesApp: React.FC<KeepNotesAppProps> = ({
   const [savedNotes, setSavedNotes] = useState([
     {
       id: '1',
-      title: 'WhisperFlow Mobile Spec',
+      title: 'ScribeFlow Mobile Spec',
       body: 'Lightweight English speech model. Floating translucent watermark icon. Automatically hooks on EditText focus.',
       time: 'Oct 16',
     },
@@ -91,7 +91,7 @@ export const KeepNotesApp: React.FC<KeepNotesAppProps> = ({
               const rect = e.currentTarget.getBoundingClientRect();
               onInputFocus('keep-notes-field', rect);
             }}
-            placeholder="Take a note (dictate using WhisperFlow)..."
+            placeholder="Take a note (dictate using ScribeFlow)..."
             className="w-full bg-transparent text-xs text-slate-200 placeholder-slate-500 focus:outline-none resize-none leading-relaxed"
           />
 

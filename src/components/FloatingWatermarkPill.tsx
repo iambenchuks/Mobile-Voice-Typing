@@ -178,7 +178,7 @@ export const FloatingWatermarkPill: React.FC<FloatingWatermarkPillProps> = ({
               ? 'bg-cyan-500 text-slate-950 shadow-md scale-105'
               : 'bg-white/15 text-white group-hover:bg-cyan-500/30'
           }`}
-          title={isListening ? 'Stop offline recording' : 'Tap to speak offline with WhisperFlow'}
+          title={isListening ? 'Stop offline recording' : 'Tap to speak offline with ScribeFlow'}
         >
           {isListening ? (
             <Mic className="w-4 h-4 animate-pulse" />
@@ -214,7 +214,7 @@ export const FloatingWatermarkPill: React.FC<FloatingWatermarkPillProps> = ({
           ) : (
             <div className="flex flex-col">
               <span className="text-[11px] font-semibold text-white/90 tracking-tight flex items-center gap-1">
-                WhisperFlow
+                ScribeFlow
                 <span className="text-[9px] text-cyan-300/80 font-normal">Offline</span>
               </span>
               <span className="text-[8px] text-slate-300/70 -mt-0.5">Watermark Active</span>

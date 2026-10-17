@@ -3,11 +3,11 @@ import { AndroidFile } from '../types';
 
 export const ANDROID_FILES: AndroidFile[] = [
   {
-    path: 'app/src/main/java/com/whisperflow/mobile/WhisperAccessibilityService.kt',
-    filename: 'WhisperAccessibilityService.kt',
+    path: 'app/src/main/java/com/scribeflow/mobile/ScribeAccessibilityService.kt',
+    filename: 'ScribeAccessibilityService.kt',
     category: 'kotlin',
     description: 'System-wide Accessibility Service that detects when you tap any text field, gets its screen coordinates, and injects recognized text into the active field.',
-    content: `package com.whisperflow.mobile
+    content: `package com.scribeflow.mobile
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
@@ -23,18 +23,18 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 
 /**
- * WhisperAccessibilityService
+ * ScribeAccessibilityService
  *
- * Core engine for WhisperFlow Android:
+ * Core engine for ScribeFlow Android:
  * 1. Detects when ANY input field (EditText) in ANY app gets focus.
  * 2. Grabs the field's screen bounds to place the floating watermark pill nearby.
  * 3. Injects transcribed offline speech directly into the active field.
  */
-class WhisperAccessibilityService : AccessibilityService() {
+class ScribeAccessibilityService : AccessibilityService() {
 
     companion object {
-        private const val TAG = "WhisperA11yService"
-        var instance: WhisperAccessibilityService? = null
+        private const val TAG = "ScribeA11yService"
+        var instance: ScribeAccessibilityService? = null
             private set
     }
 
@@ -43,7 +43,7 @@ class WhisperAccessibilityService : AccessibilityService() {
     override fun onServiceConnected() {
         super.onServiceConnected()
         instance = this
-        Log.i(TAG, "WhisperFlow Accessibility Service connected.")
+        Log.i(TAG, "ScribeFlow Accessibility Service connected.")
 
         val info = AccessibilityServiceInfo().apply {
             eventTypes = AccessibilityEvent.TYPE_VIEW_FOCUSED or
@@ -139,7 +139,7 @@ class WhisperAccessibilityService : AccessibilityService() {
         if (!success) {
             Log.d(TAG, "ACTION_SET_TEXT rejected, falling back to Clipboard Paste.")
             val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("WhisperFlow", newText)
+            val clip = ClipData.newPlainText("ScribeFlow", newText)
             clipboard.setPrimaryClip(clip)
             node.performAction(AccessibilityNodeInfo.ACTION_PASTE)
         }
@@ -148,11 +148,11 @@ class WhisperAccessibilityService : AccessibilityService() {
 `,
   },
   {
-    path: 'app/src/main/java/com/whisperflow/mobile/FloatingWatermarkService.kt',
+    path: 'app/src/main/java/com/scribeflow/mobile/FloatingWatermarkService.kt',
     filename: 'FloatingWatermarkService.kt',
     category: 'kotlin',
     description: 'System overlay service rendering the translucent watermark pill. Stays visible over any app, supports dragging with edge snapping, and toggles offline recording.',
-    content: `package com.whisperflow.mobile
+    content: `package com.scribeflow.mobile
 
 import android.annotation.SuppressLint
 import android.app.Notification
@@ -186,13 +186,13 @@ import kotlin.math.abs
 /**
  * FloatingWatermarkService
  *
- * Renders the Whisperflow signature floating translucent watermark pill
+ * Renders the ScribeFlow signature floating translucent watermark pill
  * over any active application using TYPE_APPLICATION_OVERLAY.
  */
 class FloatingWatermarkService : Service(), OfflineSpeechEngine.RecognitionListener {
 
     companion object {
-        private const val CHANNEL_ID = "whisperflow_overlay_channel"
+        private const val CHANNEL_ID = "scribeflow_overlay_channel"
         private const val NOTIF_ID = 1001
         var instance: FloatingWatermarkService? = null
             private set
@@ -238,10 +238,10 @@ class FloatingWatermarkService : Service(), OfflineSpeechEngine.RecognitionListe
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                "WhisperFlow Floating Assistant",
+                "ScribeFlow Floating Assistant",
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
-                description = "Keeps Whisperflow floating watermark active across apps"
+                description = "Keeps ScribeFlow floating watermark active across apps"
                 setShowBadge(false)
             }
             val manager = getSystemService(NotificationManager::class.java)
@@ -251,7 +251,7 @@ class FloatingWatermarkService : Service(), OfflineSpeechEngine.RecognitionListe
 
     private fun buildForegroundNotification(): Notification {
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("WhisperFlow Offline Active")
+            .setContentTitle("ScribeFlow Offline Active")
             .setContentText("Tap any input field to dictate offline")
             .setSmallIcon(android.R.drawable.ic_btn_speak_now)
             .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -412,13 +412,13 @@ class FloatingWatermarkService : Service(), OfflineSpeechEngine.RecognitionListe
     // OfflineSpeechEngine callbacks
     override fun onPartialResult(partialText: String) {
         // Stream text in real time to input field
-        WhisperAccessibilityService.instance?.injectTranscribedText(partialText, append = false)
+        ScribeAccessibilityService.instance?.injectTranscribedText(partialText, append = false)
     }
 
     override fun onFinalResult(finalText: String) {
         // Inject final punctuated text
         val punctuated = PunctuationFormatter.format(finalText)
-        WhisperAccessibilityService.instance?.injectTranscribedText(punctuated, append = true)
+        ScribeAccessibilityService.instance?.injectTranscribedText(punctuated, append = true)
         stopRecording()
     }
 
@@ -441,11 +441,11 @@ class FloatingWatermarkService : Service(), OfflineSpeechEngine.RecognitionListe
 `,
   },
   {
-    path: 'app/src/main/java/com/whisperflow/mobile/OfflineSpeechEngine.kt',
+    path: 'app/src/main/java/com/scribeflow/mobile/OfflineSpeechEngine.kt',
     filename: 'OfflineSpeechEngine.kt',
     category: 'kotlin',
     description: 'Lightweight offline English speech recognition engine. Uses Sherpa-ONNX with Whisper-Tiny.en (int8 ~39MB) running entirely on CPU/NPU with zero internet usage.',
-    content: `package com.whisperflow.mobile
+    content: `package com.scribeflow.mobile
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -586,11 +586,11 @@ class OfflineSpeechEngine(
 `,
   },
   {
-    path: 'app/src/main/java/com/whisperflow/mobile/PunctuationFormatter.kt',
+    path: 'app/src/main/java/com/scribeflow/mobile/PunctuationFormatter.kt',
     filename: 'PunctuationFormatter.kt',
     category: 'kotlin',
     description: 'Post-processor that turns spoken punctuation commands ("comma", "period", "question mark", "new line") into formatted text with proper sentence capitalization.',
-    content: `package com.whisperflow.mobile
+    content: `package com.scribeflow.mobile
 
 import java.util.Locale
 
@@ -658,11 +658,11 @@ object PunctuationFormatter {
 `,
   },
   {
-    path: 'app/src/main/java/com/whisperflow/mobile/MainActivity.kt',
+    path: 'app/src/main/java/com/scribeflow/mobile/MainActivity.kt',
     filename: 'MainActivity.kt',
     category: 'kotlin',
     description: 'Main setup & onboarding screen. Guides the user through enabling Overlay Permission, Accessibility Service, and testing the watermark slider.',
-    content: `package com.whisperflow.mobile
+    content: `package com.scribeflow.mobile
 
 import android.Manifest
 import android.content.Intent
@@ -719,7 +719,7 @@ class MainActivity : AppCompatActivity() {
         btnAccessibility.setOnClickListener {
             val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
             startActivity(intent)
-            Toast.makeText(this, "Enable 'WhisperFlow Mobile' in Accessibility list", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Enable 'ScribeFlow Mobile' in Accessibility list", Toast.LENGTH_LONG).show()
         }
 
         btnMic.setOnClickListener {
@@ -753,7 +753,7 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.RECORD_AUDIO
         ) == PackageManager.PERMISSION_GRANTED
 
-        val isA11yActive = WhisperAccessibilityService.instance != null
+        val isA11yActive = ScribeAccessibilityService.instance != null
 
         btnOverlay.text = if (hasOverlay) "✓ Overlay Granted" else "1. Grant Floating Overlay"
         btnOverlay.isEnabled = !hasOverlay
@@ -779,7 +779,7 @@ class MainActivity : AppCompatActivity() {
     android:accessibilityFeedbackType="feedbackGeneric"
     android:notificationTimeout="50"
     android:canRetrieveWindowContent="true"
-    android:settingsActivity="com.whisperflow.mobile.MainActivity" />
+    android:settingsActivity="com.scribeflow.mobile.MainActivity" />
 `,
   },
   {
@@ -819,8 +819,8 @@ class MainActivity : AppCompatActivity() {
             android:id="@+id/icon_mic"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:contentDescription="WhisperFlow Dictate"
-            android:src="@drawable/ic_whisper_flow_watermark" />
+            android:contentDescription="ScribeFlow Dictate"
+            android:src="@drawable/ic_scribeflow_watermark" />
 
         <TextView
             android:id="@+id/text_status"
@@ -843,9 +843,9 @@ class MainActivity : AppCompatActivity() {
     description: 'Android Manifest defining SYSTEM_ALERT_WINDOW, RECORD_AUDIO, and BIND_ACCESSIBILITY_SERVICE.',
     content: `<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.whisperflow.mobile">
+    package="com.scribeflow.mobile">
 
-    <!-- Essential Permissions for WhisperFlow -->
+    <!-- Essential Permissions for ScribeFlow -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -855,10 +855,10 @@ class MainActivity : AppCompatActivity() {
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="WhisperFlow Mobile"
+        android:label="ScribeFlow Mobile"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.WhisperFlow">
+        android:theme="@style/Theme.ScribeFlow">
 
         <!-- Setup Activity -->
         <activity
@@ -878,7 +878,7 @@ class MainActivity : AppCompatActivity() {
 
         <!-- Accessibility Service: Injects speech text into any active app -->
         <service
-            android:name=".WhisperAccessibilityService"
+            android:name=".ScribeAccessibilityService"
             android:exported="true"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
@@ -904,11 +904,11 @@ class MainActivity : AppCompatActivity() {
 }
 
 android {
-    namespace = "com.whisperflow.mobile"
+    namespace = "com.scribeflow.mobile"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.whisperflow.mobile"
+        applicationId = "com.scribeflow.mobile"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
@@ -957,7 +957,7 @@ dependencies {
     filename: 'README.md',
     category: 'docs',
     description: 'Step-by-step instructions to compile APK in Android Studio, install on your mobile phone, and activate offline dictation.',
-    content: `# WhisperFlow Mobile for Android
+    content: `# ScribeFlow Mobile for Android
 
 An ultra-lightweight, 100% offline floating voice dictation app for Android that mirrors Whisperflow and Handy.
 
@@ -968,26 +968,63 @@ An ultra-lightweight, 100% offline floating voice dictation app for Android that
 - **Instant Text Injection**: Inserts speech directly into the cursor position via \`AccessibilityNodeInfo.ACTION_SET_TEXT\` and clipboard fallback.
 - **Spoken Punctuation**: Naturally handles "comma", "period", "question mark", "exclamation point", "new line".
 
-## 🚀 How to Build & Install
+## 🚀 How to Build the APK on GitHub (Zero Android Studio Needed!)
+1. Push this repository to GitHub.
+2. Click the **Actions** tab at the top of your GitHub repository.
+3. You will see **Build ScribeFlow Android APK** running automatically.
+4. When finished (approx 2 minutes), click the completed run, scroll to **Artifacts**, and click **scribeflow-debug-apk** to download the APK straight to your phone!
+`,
+  },
+  {
+    path: '.github/workflows/build-apk.yml',
+    filename: 'build-apk.yml (GitHub Actions)',
+    category: 'gradle',
+    description: 'Automated GitHub Actions CI workflow that compiles the Android APK in the cloud and attaches it as a downloadable artifact.',
+    content: `name: Build ScribeFlow Android APK
 
-### Step 1: Open in Android Studio
-1. Extract the downloaded ZIP archive.
-2. Open Android Studio (Ladybug or newer) and select **Open Folder** -> select the project root.
-3. Allow Gradle to sync dependencies (\`sherpa-onnx\`, \`core-ktx\`).
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
 
-### Step 2: Download the Whisper Tiny.en Model (~39 MB)
-Download the quantized INT8 model and place it in \`app/src/main/assets/\`:
-- Model file: \`whisper_tiny_en_int8.onnx\`
-- Tokens file: \`tokens.txt\`
+jobs:
+  build:
+    name: Build Android APK
+    runs-on: ubuntu-latest
 
-### Step 3: Run & Grant 3 Android Permissions
-When you launch WhisperFlow for the first time:
-1. **Draw Over Other Apps**: Tap "Grant Floating Overlay" to allow the floating watermark pill.
-2. **Accessibility Service**: Tap "Enable Accessibility" -> go to Installed Services -> Enable **WhisperFlow Mobile**.
-3. **Microphone**: Allow audio recording for local dictation.
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-### Step 4: Use Anywhere!
-Open Gemini chat, Google Search, WhatsApp, or any app. Tap any text field, tap the floating watermark pill, speak in English, and watch your words typed instantly!
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Make Gradlew Executable
+        run: chmod +x gradlew || true
+
+      - name: Build APK with Gradle
+        run: |
+          if [ -f "./gradlew" ]; then
+            ./gradlew assembleDebug --no-daemon
+          else
+            gradle assembleDebug --no-daemon
+          fi
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: scribeflow-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
 `,
   },
 ];
@@ -1003,7 +1040,7 @@ export async function generateAndroidProjectZip(): Promise<Blob> {
     zip.file(file.path, file.content);
   }
 
-  // Add gradlew stub and settings
+  // Add gradlew stub, wrapper properties and settings
   zip.file(
     'settings.gradle.kts',
     `pluginManagement {
@@ -1020,8 +1057,29 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "WhisperFlowMobile"
+rootProject.name = "ScribeFlowMobile"
 include(":app")
+`
+  );
+
+  zip.file(
+    'build.gradle.kts',
+    `plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.android) apply false
+}
+`
+  );
+
+  zip.file(
+    'gradle/wrapper/gradle-wrapper.properties',
+    `distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+distributionUrl=https\\://services.gradle.org/distributions/gradle-8.7-bin.zip
+networkTimeout=10000
+validateDistributionUrl=true
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
 `
   );
 
